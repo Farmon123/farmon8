@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Луғат ба англисӣ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f8ff;
+      padding: 30px;
+    }
+    h1 {
+      color: #333;
+    }
+    .question {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+    .feedback {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Луғат ба англисӣ</h1>
+  <div class="question" id="question">...</div>
+  <input type="text" id="answerInput" placeholder="Ҷавобатонро нависед">
+  <button onclick="checkAnswer()">Санҷидан</button>
+  <div class="feedback" id="feedback"></div>
+
+  <script>
+    const vocab = [
+      { tajik: "писандидан / эҳтиром кардан", english: "admired" },
+      { tajik: "мутавозин", english: "balanced" },
+      { tajik: "корҳои мактабӣ", english: "schoolwork" },
+      { tajik: "фаъолиятҳои беруназсинфӣ", english: "extracurriculars" },
+      { tajik: "ба назар мерасид", english: "seemed" },
+      { tajik: "бе заҳмат / осон", english: "effortless" },
+      { tajik: "манзараҳо / ҳолатҳо", english: "scenes" },
+      { tajik: "роҳатӣ / осонӣ", english: "ease" },
+      { tajik: "якҷо анҷом додан (якчанд корро)", english: "juggled" },
+      { tajik: "вазн / бори гарон", english: "weight" },
+      { tajik: "эҳтиром / ситоиш", english: "admiration" },
+      { tajik: "доимӣ", english: "constant" },
+      { tajik: "аз дигарон пеш гузаштан", english: "outdo" },
+      { tajik: "буғкунанда / нафасгиркунанда", english: "suffocating" },
+      { tajik: "фурӯбарنده / истеъмолкунанда", english: "consuming" },
+      { tajik: "вазифаҳо", english: "tasks" },
+      { tajik: "вонамуд кардан", english: "pretending" },
+      { tajik: "шадид", english: "intense" },
+      { tajik: "машғулият / ҷаласа", english: "session" },
+      { tajik: "супориш", english: "assignment" },
+      { tajik: "фурӯ бурда шуд / ба худ кашид", english: "consumed" },
+      { tajik: "бодиққат / боэҳтиёт", english: "meticulously" },
+      { tajik: "таҳқиқшуда", english: "researched" },
+      { tajik: "сазовор", english: "deserving" },
+      { tajik: "супоридан", english: "submit" },
+      { tajik: "ба ҷои", english: "instead" },
+      { tajik: "хастагӣ", english: "exhaustion" },
+      { tajik: "ноумедӣ / асабонӣ", english: "frustration" },
+      { tajik: "хам шудан / суст афтодан", english: "slumped" },
+      { tajik: "бо диққат нигоҳ кардан", english: "staring" },
+      { tajik: "баҳоҳо", english: "grades" },
+      { tajik: "пуршуда", english: "filled" },
+      { tajik: "дастовардҳо", english: "accomplishments" },
+      { tajik: "шонаҳо", english: "shoulders" },
+      { tajik: "пай бурдан / аҳамият додан", english: "noticing" },
+      { tajik: "гирифтори сахт / машғулшуда", english: "obsessed" },
+      { tajik: "комилӣ", english: "perfection" },
+      { tajik: "дар наздикӣ / ахиран", english: "lately" },
+      { tajik: "ду project ид намудан / шубҳа кардан", english: "hesitated" },
+      { tajik: "маҷбур шудан", english: "forced" },
+      { tajik: "пичинг гуфтан", english: "whispered" },
+      { tajik: "шикастан (дар маънои эмотсионалӣ)", english: "cracking" },
+      { tajik: "такя дод / хам шуд", english: "leaned" },
+      { tajik: "ба пеш", english: "forward" },
+      { tajik: "мулоим", english: "gentle" },
+      { tajik: "устувор", english: "firm" },
+      { tajik: "муборизаҳо / душвориҳо", english: "struggles" },
+      { tajik: "нуқсонҳо", english: "flaws" },
+      { tajik: "хоб будан / дароз кашидан", english: "lay" },
+      { tajik: "шифти хона", english: "ceiling" },
+      { tajik: "боз такрор кардан", english: "replaying" },
+      { tajik: "дунбол кардан", english: "chasing" },
+      { tajik: "танг / зич", english: "tight" },
+      { tajik: "чанг / нигоҳ", english: "grip" },
+      { tajik: "ҷузъият", english: "detail" },
+      { tajik: "сахт вобаста шудан", english: "obsessing" },
