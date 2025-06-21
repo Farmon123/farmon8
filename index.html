@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tajik-English Vocabulary Trainer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            color: white;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .container {
+            background: rgba(0, 20, 40, 0.85);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+        }
+        h1 {
+            margin-bottom: 25px;
+            font-size: 28px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        #word-display {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 25px 0;
+            min-height: 40px;
+            letter-spacing: 1px;
+        }
+        #input-container {
+            margin: 20px 0;
+        }
+        #answer {
+            width: 80%;
+            padding: 12px 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        #timer {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #FFD700;
+        }
+        #progress {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+        button {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #FF5252;
+            transform: scale(1.05);
+        }
+        #results {
+            font-size: 22px;
+            line-height: 1.6;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Тарҷумаи калимаҳо аз тоҷикӣ ба англисӣ</h1>
+        <div id="timer">09:00</div>
+        <div id="word-display"></div>
+        <div id="input-container">
+            <input type="text" id="answer" placeholder="Навишед ба англисӣ...">
+        </div>
+        <div id="progress">Калима: 0/50</div>
+        <button id="continue-btn">Идома додан</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Массив из 50 таджикских слов и их переводов
+        const vocabulary = [
+            {tajik: "кӯдак", english: "child"},
+            {tajik: "мева", english: "fruit"},
+            {tajik: "об", english: "water"},
+            {tajik: "хурӯс", english: "rooster"},
+            {tajik: "моҳӣ", english: "fish"},
+            {tajik: "дарахт", english: "tree"},
+            {tajik: "гул", english: "flower"},
+            {tajik: "шаб", english: "night"},
+            {tajik: "рӯз", english: "day"},
+            {tajik: "хона", english: "house"},
+            {tajik: "кӯҳ", english: "mountain"},
+            {tajik: "дарё", english: "river"},
+            {tajik: "китоб", english: "book"},
+            {tajik: "қалам", english: "pen"},
+            {tajik: "мошин", english: "car"},
+            {tajik: "замин", english: "earth"},
+            {tajik: "офтоб", english: "sun"},
+            {tajik: "моҳ", english: "moon"},
+            {tajik: "ситора", english: "star"},
+            {tajik: "бод", english: "wind"},
+            {tajik: "борон", english: "rain"},
+            {tajik: "барф", english: "snow"},
+            {tajik: "оташ", english: "fire"},
+            {tajik: "ҳаво", english: "air"},{tajik: "роҳ", english: "road"},
+            {tajik: "даст", english: "hand"},
+            {tajik: "пой", english: "foot"},
+            {tajik: "чашм", english: "eye"},
+            {tajik: "гӯш", english: "ear"},
+            {tajik: "дил", english: "heart"},
+            {tajik: "хӯрок", english: "food"},
+            {tajik: "шир", english: "milk"},
+            {tajik: "нон", english: "bread"},
+            {tajik: "гӯшт", english: "meat"},
+            {tajik: "сабзӣ", english: "vegetable"},
+            {tajik: "музик", english: "music"},
+            {tajik: "рақс", english: "dance"},
+            {tajik: "сурат", english: "picture"},
+            {tajik: "рӯй", english: "face"},
+            {tajik: "мӯй", english: "hair"},
+            {tajik: "хоб", english: "sleep"},
+            {tajik: "хонанд", english: "student"},
+            {tajik: "муаллим", english: "teacher"},
+            {tajik: "кор", english: "work"},
+            {tajik: "бозӣ", english: "game"},
+            {tajik: "дӯст", english: "friend"},
+            {tajik: "оил", english: "family"},
+            {tajik: "ватан", english: "homeland"},
+            {tajik: "забон", english: "language"},
+            {tajik: "оромӣ", english: "peace"}
+        ];
+
+        // Элементы DOM
+        const wordDisplay = document.getElementById('word-display');
+        const answerInput = document.getElementById('answer');
+        const timerDisplay = document.getElementById('timer');
+        const progressDisplay = document.getElementById('progress');
+        const continueBtn = document.getElementById('continue-btn');
+        const resultsDiv = document.getElementById('results');
+
+        // Переменные состояния
+        let currentWordIndex = 0;
+        let score = 0;
+        let timeLeft = 540; // 9 минут в секундах
+        let timer;
+
+        // Инициализация
+        function init() {
+            showWord();
+            startTimer();
+            
+            continueBtn.addEventListener('click', nextWord);
+            answerInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') nextWord();
+            });
+        }
+
+        // Показать текущее слово
+        function showWord() {
+            wordDisplay.textContent = vocabulary[currentWordIndex].tajik;
+            answerInput.value = '';
+            answerInput.focus();
+            progressDisplay.textContent = `Калима: ${currentWordIndex+1}/50`;
+        }
+
+        // Следующее слово
+        function nextWord() {
+            const userAnswer = answerInput.value.trim().toLowerCase();
+            const correctAnswer = vocabulary[currentWordIndex].english.toLowerCase();
+            
+            if (userAnswer === correctAnswer) {
+                score++;
+            }
+            
+            currentWordIndex++;
+            
+            if (currentWordIndex < vocabulary.length) {
+                showWord();
+            } else {
+                finishGame();
+            }
+        }
+
+        // Таймер
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                const seconds = (timeLeft % 60).toString().padStart(2, '0');
+                timerDisplay.textContent = `${minutes}:${seconds}`;
+                
+                if (timeLeft <= 0) {
+                    finishGame();
+                }
+            }, 1000);
+        }
+
+        // Завершение игры
+        function finishGame() {
+            clearInterval(timer);
+            
+            const percentage = Math.round((score / vocabulary.length) * 100);
+            let message;
+            
+            if (percentage >= 90) message = "Аъло! Шумо моҳири забони англисӣ ҳастед! 👏";
+            else if (percentage >= 70) message = "Хуб! Натиҷаи хуб! 👍";
+            else message = "Талош кунед, боз ҳам метавонед беҳтар! 💪";
+            
+            resultsDiv.innerHTML = `
+                <h2>Натиҷаҳо:</h2>
+                <p>Шумо ${score} аз ${vocabulary.length}-ро дуруст ҷавоб додед</p>
+                <p>${percentage}% дуруст</p>
+                <p><strong>${message}</strong></p>
+            `;
+            
+            resultsDiv.style.display = 'block';
+            wordDisplay.style.display = 'none';
+            answerInput.style.display = 'none';
+            continueBtn.style.display = 'none';
+            progressDisplay.style.display = 'none';
+        }
+
+        // Запуск приложения при загрузке страницы
+        window.onload = init;
+    </script>
+</body>
+</html>
