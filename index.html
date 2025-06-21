@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="tg">
 <head>
-  <meta charset="UTF-8">
-  <title>Луғат Тест</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Луғат - Тарҷумаи Калимаҳо</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Луғатро тарҷума кун</h1>
-  <div id="word-box"></div>
-  <input type="text" id="answer" placeholder="Тарҷумаи англисиро навис">
-  <button onclick="checkAnswer()">Санҷиш</button>
-  <p id="result"></p>
+  <div class="container">
+    <h1>Луғатро тарҷума кунед</h1>
+
+    <div class="word-box">
+      <p id="word">Луғатҳои тоҷикӣ</p>
+    </div>
+
+    <input
+      type="text"
+      id="translation"
+      placeholder="Тарҷумаи англисиро ин ҷо нависед"
+      autocomplete="off"
+    />
+
+    <button id="submit-btn">Ҷавоб додан</button>
+
+    <p id="feedback"></p>
+  </div>
 
   <script src="script.js"></script>
 </body>
