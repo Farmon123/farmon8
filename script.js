@@ -1,4 +1,4 @@
-const words = [
+const dictionary = [
   { toj: "китоб", eng: "book" },
   { toj: "мошин", eng: "car" },
   { toj: "мактаб", eng: "school" },
@@ -6,25 +6,43 @@ const words = [
   { toj: "хонаи ман", eng: "my house" }
 ];
 
-let current = 0;
+let currentIndex = 0;
+
+const wordElement = document.getElementById("word");
+const inputElement = document.getElementById("translation");
+const feedbackElement = document.getElementById("feedback");
+const submitBtn = document.getElementById("submit-btn");
 
 function showWord() {
-  document.getElementById("word-box").innerText = words[current].toj;
-  document.getElementById("answer").value = "";
-  document.getElementById("result").innerText = "";
+  wordElement.textContent = dictionary[currentIndex].toj;
+  inputElement.value = "";
+  feedbackElement.textContent = "";
+  inputElement.focus();
 }
 
-function checkAnswer() {
-  const user = document.getElementById("answer").value.trim().toLowerCase();
-  const correct = words[current].eng.toLowerCase();
-  if (user === correct) {
-    document.getElementById("result").innerText = "✅ Дуруст!";
+function checkTranslation() {
+  const userAnswer = inputElement.value.trim().toLowerCase();
+  const correctAnswer = dictionary[currentIndex].eng.toLowerCase();
+
+  if (userAnswer === correctAnswer) {
+    feedbackElement.textContent = "✅ Ҷавоби дуруст!";
+    feedbackElement.style.color = "#4caf50";
   } else {
-    document.getElementById("result").innerText = ❌ Хато. Ҷавоби дуруст: ${words[current].eng};
+    feedbackElement.textContent = ❌ Ҷавоби хато. Ҷавоби дуруст: "${dictionary[currentIndex].eng}";
+    feedbackElement.style.color = "#f44336";
   }
 
-  current = (current + 1) % words.length;
-  setTimeout(showWord, 2000);
+  currentIndex = (currentIndex + 1) % dictionary.length;
+
+  setTimeout(showWord, 2500);
 }
+
+submitBtn.addEventListener("click", checkTranslation);
+
+inputElement.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    checkTranslation();
+  }
+});
 
 window.onload = showWord;
