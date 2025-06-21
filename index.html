@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Луғатпурсӣ бо Тарҷума</title>
+<style>
+  body {
+    background: #121212;
+    color: #eee;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .app {
+    background: #1f1f1f;
+    padding: 30px 40px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 0 15px #00bcd4;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #00bcd4;
+  }
+  #word {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 18px;
+    font-weight: 700;
+  }
+  input#answer {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    outline: none;
+  }
+  button#check {
+    width: 100%;
+    padding: 14px;
+    background-color: #00bcd4;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #121212;
+    transition: background-color 0.3s ease;
+  }
+  button#check:hover {
+    background-color: #0097a7;
+  }
+  #result {
+    margin-top: 20px;
+    font-size: 1.3rem;
+    text-align: center;
+    min-height: 28px;
+    user-select: none;
+  }
+  #clock {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #66fff6;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <h2>Луғатпурсӣ - Тарҷума кун!</h2>
+    <div id="clock">Вақт: --:--:--</div>
+    <div id="word">луғат</div>
+    <input
+      id="answer"
+      type="text"
+      placeholder="Ҷавоби англисиро нависед"
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <button id="check">Ҷавобро санҷед</button>
+    <div id="result"></div>
+  </div>
+
+<script>
+  const dictionary = [
+    { toj: "дӯстӣ", eng: "friendship" },
+    { toj: "об", eng: "water" },
+    { toj: "ҳаво", eng: "air" },
+    { toj: "намоиш", eng: "show" },
+    { toj: "рӯйхат", eng: "list" }
+  ];
+
+  let current = 0;
+
+  const wordEl = document.getElementById('word');
+  const answerEl = document.getElementById('answer');
+  const checkBtn = document.getElementById('check');
+  const resultEl = document.getElementById('result');
+  const clockEl = document.getElementById('clock');
+
+  function showWord() {
+    wordEl.textContent = dictionary[current].toj;
+    answerEl.value = '';
+    resultEl.textContent = '';
+    answerEl.focus();
+  }
+
+  function checkAnswer() {
+    const userAnswer = answerEl.value.trim().toLowerCase();
+    const correctAnswer = dictionary[current].eng.toLowerCase();
+
+    if (!userAnswer) {
+      resultEl.textContent = 'Лутфан ҷавобро ворид кунед!';
+      resultEl.style.color = '#ffc107';
+      return;
+    }
+
+    if (userAnswer === correctAnswer) {
+      resultEl.textContent = '🎉 Дуруст!';
+      resultEl.style.color = '#4caf50';
+    } else {
+      resultEl.textContent = ❌ Хато! Ҷавоб: "${dictionary[current].eng}";
+      resultEl.style.color = '#f44336';
+    }
+
+    current = (current + 1) % dictionary.length;
+    setTimeout(showWord, 2200);
+  }
+
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    clockEl.textContent = Вақт: ${h}:${m}:${s};
+  }
+
+  checkBtn.addEventListener('click', checkAnswer);
+  answerEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      checkAnswer();
+    }
+  });
+
+  window.onload = () => {
+    showWord();
+    updateClock();
+    setInterval(updateClock, 1000);
+  };
+</script>
+</body>
+</html>
