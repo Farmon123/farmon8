@@ -1,15 +1,60 @@
 body {
-  font-family: sans-serif;
+  background: linear-gradient(135deg, #4a90e2, #9013fe);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 40px 60px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
   text-align: center;
-  margin-top: 50px;
+  width: 320px;
 }
 
-input, button {
-  font-size: 18px;
-  padding: 8px;
+.word-box {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
-#result {
-  font-size: 20px;
+input#translation {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  outline: none;
+}
+
+button#submit-btn {
+  background-color: #ff9800;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #222;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+button#submit-btn:hover {
+  background-color: #e68900;
+}
+
+#feedback {
+  font-size: 1.2rem;
   margin-top: 20px;
+  min-height: 1.5rem;
 }
